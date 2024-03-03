@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/answers_widget.dart';
 import 'package:quiz_app/data/questions.dart';
-import 'package:quiz_app/models/quiz_questions.dart';
 
 class QuestionScreen extends StatefulWidget {
-  const QuestionScreen({super.key});
+  const QuestionScreen({super.key, required this.answerClicked});
 
   @override
   State<QuestionScreen> createState() => _QuestionScreenState();
+
+  final void Function(String answer) answerClicked;
 }
 
 class _QuestionScreenState extends State<QuestionScreen> {
-  final QuizQuestion quiz_question = questions[0];
+  var quiz_question_index = 0;
+
+  void answerClicked(String selectedAnswer) {
+    widget.answerClicked(selectedAnswer);
+    setState(() {
+      quiz_question_index++;
+    });
+  }
+
+  // final QuizQuestion quiz_question = questions[0];
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +36,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            quiz_question.text,
+            questions[quiz_question_index].text,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -36,10 +46,12 @@ class _QuestionScreenState extends State<QuestionScreen> {
           const SizedBox(
             height: 40,
           ),
-          ...quiz_question.shuffleAnswers().map(
+          ...questions[quiz_question_index].shuffleAnswers().map(
                 (e) => AnswerButton(
                   text: e,
-                  onClicked: () {},
+                  onClicked: () {
+                    answerClicked(e);
+                  },
                 ),
               ),
         ],
