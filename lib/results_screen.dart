@@ -3,7 +3,10 @@ import 'package:quiz_app/data/questions.dart';
 import 'package:quiz_app/question_summary.dart';
 
 class ResultsScreen extends StatelessWidget {
-  ResultsScreen({super.key, required this.selectedAnswersList});
+  ResultsScreen(
+      {super.key, required this.selectedAnswersList, required this.reStart});
+
+  final void Function() reStart;
 
   List<String> selectedAnswersList;
 
@@ -40,7 +43,14 @@ class ResultsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-                "You have selected $correctAnswers correct out of $totalAnswers answers."),
+              "You have selected $correctAnswers correct out of $totalAnswers answers.",
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Color(0xC2EFDDF8),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -48,9 +58,13 @@ class ResultsScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            TextButton(
-              onPressed: () {},
-              child: const Text("Restart again"),
+            TextButton.icon(
+              onPressed: reStart,
+              icon: Icon(Icons.restart_alt_outlined),
+              label: const Text("Restart again"),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.white,
+              ),
             ),
           ],
         ));
